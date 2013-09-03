@@ -105,11 +105,11 @@ class Spectrometer():
             return False
 
     def __byte_2_ascii(self,bdata):
-        """ convert the binary response from 'DBA?' into float numbers """
+        """ convert the binary response from 'DBA/B?' into float numbers """
         outdata = []  
         for i in range(0,len(bdata)-4,4):
-            expbytes = bdata[i:i+2]     # 2 byte mantisse
-            manbytes = bdata[i+2:i+4]   # 2 byte exponent
+            expbytes = bdata[i:i+2]     # 2 byte exponent
+            manbytes = bdata[i+2:i+4]   # 2 byte mantissa
             expvalue = struct.unpack(">h",expbytes)
             manvalue = struct.unpack(">H",manbytes)
             psd_mW  = (manvalue[0])/10000.0*10**expvalue[0] #power spectral density in mW
