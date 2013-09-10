@@ -3,7 +3,7 @@ import serial
 import struct
 import time
 
-# Version 2013-09-02
+# Version 2013-09-10
 
 """ define some time constants: these are necessary sleep times between sending 
     some signal to the spectrometer and polling the answer (buffer fill time).
@@ -13,6 +13,35 @@ CONST_TIME_MEDIUM = 0.1
 CONST_TIME_LONG   = 1.0
 
 
+class Spectrometer_state():
+    def __init__(self,s):
+        self.state = self.update(s)
+        
+    def update(self,s):
+        state={'is_log':s.is_log()}
+        state.update({'optical_attenuator':s.get_optical_attenuator()})
+        state.update({'sweep_average':s.get_sweep_average()})
+        state.update({'point_average':s.get_point_average()})
+        state.update({'center_wavelength':s.get_center_wavelength()})
+        state.update({'current_memory':s.get_current_memory()})
+        state.update({'center_wavelength':s.get_center_wavelength()})        
+        state.update({'current_trace':s.get_current_trace()})
+        state.update({'center_wavelength':s.get_center_wavelength()})        
+        state.update({'measuring_points':s.get_measuring_points()})
+        state.update({'center_wavelength':s.get_center_wavelength()})        
+        state.update({'resolution':s.get_resolution()})
+        state.update({'span':s.get_span()})
+        state.update({'start_wavelength':s.get_start_wavelength()})
+        state.update({'stop_wavelength':s.get_stop_wavelength()})
+        state.update({'start_wavelength':s.get_start_wavelength()})
+        state.update({'start_wavelength':s.get_start_wavelength()})
+        state.update({'VBW':s.get_VBW()})
+        return state
+    def printt(self):
+        print "\n\n ---- spectrometer state --- \n"
+        for key in self.state.iterkeys():
+            print "%s - "%(key), self.state[key]
+        
 class Spectrometer():
     #
     # functions for initialization and closing
@@ -188,6 +217,30 @@ class Spectrometer():
             self.send_message("CNT %.2f"%val)
         else:
             print "error: set_center_wavelength() - invalid argument"
+
+    def get_current_memory(self):
+        self.send_message("MSL?")
+        msg = self.flush_buffer()
+        return msg
+
+    def set_current_memory(self,val):
+        if val.upper() in ["A","B"]:
+            self.send_message("MSL %s"%(val.upper()))
+            time.sleep(CONST_TIME_LONG) #spectrometer needs some time to switch 
+        else: 
+            print "error: set_current_memory - invalid argument"
+
+    def get_current_trace(self): 
+        self.send_message("TSL?")
+        msg = self.flush_buffer()
+        return msg
+
+    def set_current_trace(self,val):
+        if val.upper() in ["A","B"]:
+            self.send_message("TSL %s"%(val.upper()))
+            time.sleep(CONST_TIME_LONG)
+        else: 
+            print "error: set_current_trace - invalid argument"
     
     def set_linear_scale(self,val):
         """ set the linear scale """
@@ -246,7 +299,7 @@ class Spectrometer():
 
     def get_span(self):
         """ get the span """
-        self.query_float("SPN?")
+        return self.query_float("SPN?")
     
     def set_span(self,val):
         """ set the span """
@@ -313,8 +366,13 @@ class Spectrometer():
             wlvec.append( i * physres + startwl )
         return wlvec
 
-    def get_spectrum(self):
+    def get_spectrum(self,membank):
         """ pull one spectrum from the spectrometer """
+
+        if not membank in ["A","B"]:
+            print "get_spectrum argument error!"
+            return 0
+        else: membank = membank.upper()
         #check whether the spectrometer is in LOG display mode
         #if yes, store log variables and change to lin mode
         if self.is_log():
@@ -324,7 +382,7 @@ class Spectrometer():
             self.set_linear_scale(1e-3)
         else:
             waslog = False
-        self.send_message("DBA?") #  request the data as binary (4 byte linear)
+        self.send_message("DB%s?"%(membank)) #  request the data as binary (4 byte linear)
         time.sleep(CONST_TIME_MEDIUM)
         out = ""
         emptycounter = 0
@@ -348,28 +406,7 @@ class Spectrometer():
     #
     # Functions that need to be tested
     #
-    def get_current_memory(self):  #still untested!! what exactly is the difference between memory and trace?
-        self.send_message("MSL?")
-        msg = self.flush_buffer()
-        return msg
 
-    def set_current_memory(self,val): #still untested!!
-        if val.upper() in ["A","B"]:
-            self.send_message("MSL %s"%(val.upper))
-        else: 
-            print "error: set_current_memory - invalid argument"
-
-
-    def get_current_trace(self):  #still untested!!
-        self.send_message("TSL?")
-        msg = self.flush_buffer()
-        return msg
-
-    def set_current_trace(self,val): #still untested!!
-        if val.upper() in ["A","B"]:
-            self.send_message("TSL %s"%(val.upper))
-        else: 
-            print "error: set_current_trace - invalid argument"
 
     def get_optical_attenuator(self):
         """ check whether the optical attenuator is on """
@@ -393,41 +430,5 @@ class Spectrometer():
             value = float( msg[0:l-2])
             unitdict = {"MW":1e-3, "UW":1e-6, "NW":1e-9,"PW":1e-12}
             return value * unitdict[unit]
-#            if unit == "MW":
-#                return 1e-3 * value
-#            elif unit == "UW":
-#                return 1e-6 * value
-#            elif unit == "NW":
-#                return 1e-9 * value
-#            elif unit == "PW":
-#                return 1e-12 * value
     
-
-#
-# TODO
-# -'set' functions shall return True if the input was valid, False otherwhise
-# -(consistency) tests
-# -memory "A" or "B" selection etc
-#
-
-
-s = Spectrometer('/dev/ttyUSB0',
-                 9600,
-                 serial.PARITY_NONE,
-                 serial.STOPBITS_ONE,
-                 serial.EIGHTBITS)
-
-s.set_verbose_level(1)
-
-s.set_sweep_average(0)
-s.set_point_average(0)
-s.set_VBW(1e3)
-s.set_start_wavelength(800)
-s.set_stop_wavelength(1500)
-s.set_measuring_points(251)
-s.make_sweep()
-aa = s.get_spectrum()
-print aa
-print max(aa)
-s.close()
 
