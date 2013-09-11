@@ -10,6 +10,10 @@ s = Spectrometer('/dev/ttyUSB0',
                  serial.STOPBITS_ONE,
                  serial.EIGHTBITS)
 
+s.set_verbose_level(1)
+
+alltests(s)
+#function_wrapper(s.get_measuring_points,None)
 
 #print tdict
 
@@ -18,8 +22,8 @@ s = Spectrometer('/dev/ttyUSB0',
 #print s.get_spectrum("A")
 #s.set_verbose_level(1)
 
-state = Spectrometer_state(s)
-state.printt()
+#state = Spectrometer_state(s)
+#state.printt()
 
 s.close()
 
