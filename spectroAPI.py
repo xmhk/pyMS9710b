@@ -77,7 +77,7 @@ class Spectrometer():
     #
     # low-level spectrometer communication 
     #
-    def flush_buffer(self):
+    def flush_buffer(self):     #tested and documented
         """ empty the spectrometer buffer; return and show its content (the latter if if self.VerboseLevel >= 2) """
         out = ''
         self.__verbose_output( "flushing buffer", 2 )
@@ -91,14 +91,14 @@ class Spectrometer():
         self.__verbose_output( "... buffer contained the following:\n ---\n" + out + "\n --- \n",2 )
         return out.rstrip("\r\n")
 
-    def send_message(self,message):
+    def send_message(self,message):   #tested and documtented
         """ send a message to the spectrometer """
         self.__verbose_output( ">>sending '%s' to spectrometer"%(message), 2 )
         self.device.write( message + "\r\n" )
         time.sleep(CONST_TIME_MEDIUM)          #short sleep time to prevent too many requests
 
 
-    def make_sweep(self):
+    def make_sweep(self):  # documented
         """ make one single sweep """
         self.send_message("SSI") #make one sweep
         time.sleep(CONST_TIME_SHORT) #wait for spectrometer to finish sweep
@@ -112,7 +112,7 @@ class Spectrometer():
                 out =self.device.read(3)
         self.__verbose_output( "... sweep complete", 1)
 
-    def query_float(self,query_string):
+    def query_float(self,query_string): 
         """ returns the result of a Query (e.g. "STA?") as a float number """
         self.send_message(query_string)
         msg = self.flush_buffer()
@@ -149,7 +149,7 @@ class Spectrometer():
     #
     # basic get and set functions
     #
-    def is_log(self):
+    def is_log(self): #tested and documtented
         """ check whether the spectrometer is in LOG mode; returns True or False """
         self.send_message("LVS?")
         msg = self.flush_buffer()
@@ -158,7 +158,7 @@ class Spectrometer():
         else:
             return False
 
-    def get_sweep_average(self):       #tested
+    def get_sweep_average(self):       #tested and documented
         """ get the sweep average """
         self.send_message("AVS?")
         msg = self.flush_buffer()
@@ -167,7 +167,7 @@ class Spectrometer():
         else:
             return int(msg)
 
-    def set_sweep_average(self,val):   #tested
+    def set_sweep_average(self,val):   #tested and documented
         """ set the sweep average """
         if self.__is_int_or_float(val) and self.__is_between(val,2,1000):
             self.send_message("AVS %d"%val)
@@ -178,7 +178,7 @@ class Spectrometer():
         else:
             self.__verbose_output( "error: set_sweep_average() - invalid argument",1)
 
-    def get_point_average(self):        #tested
+    def get_point_average(self):        #tested and documented
         """ get the point average """
         self.send_message("AVT?")
         msg = self.flush_buffer()
@@ -199,84 +199,84 @@ class Spectrometer():
             self.__verbose_output("error: set_sweep_average() - invalid argument",1)
         
             
-    def get_center_wavelength(self):     #tested
+    def get_center_wavelength(self):     #tested and documented
         """ get the center wavelength """
         return self.query_float("CNT?")
 
-    def set_center_wavelength(self,val): #tested
+    def set_center_wavelength(self,val): #tested and documented
         """ set the center wavelength """
         if self.__is_int_or_float(val) and self.__is_between( val, 600, 1750):
             self.send_message("CNT %.2f"%val)
         else:
             self.__verbose_output("error: set_center_wavelength() - invalid argument",1)
 
-    def get_current_memory(self):  #tested
+    def get_current_memory(self):  #tested and documented
         self.send_message("MSL?")
         msg = self.flush_buffer()
         return msg
 
-    def set_current_memory(self,val): #tested
+    def set_current_memory(self,val): #tested and documented
         if val.upper() in ["A","B"]:
             self.send_message("MSL %s"%(val.upper()))
             time.sleep(CONST_TIME_LONG) #spectrometer needs some time to switch 
         else: 
             self.__verbose_output("error: set_current_memory - invalid argument",1)
 
-    def get_current_trace(self): #tested
+    def get_current_trace(self): #tested and documented
         self.send_message("TSL?")
         msg = self.flush_buffer()
         return msg
 
-    def set_current_trace(self,val):  #tested
+    def set_current_trace(self,val):  #tested documented
         if val.upper() in ["A","B"]:
             self.send_message("TSL %s"%(val.upper()))
             time.sleep(CONST_TIME_LONG)
         else: 
             self.__verbose_output("error: set_current_trace - invalid argument",1)
     
-    def set_linear_scale(self,val):
+    def set_linear_scale(self,val): #documented
         """ set the linear scale """
         if self.__is_int_or_float(val) and self.__is_between(val, 1e-12, 1.0):
             self.send_message( "LLV %f"%(val*1000))   #spectrometer expects values in mW!
         else:
             self.__verbose_output("error: set_linear_scale() - invalid argument",1)
 
-    def get_log_scale(self):
+    def get_log_scale(self):  # documented
         """ get the log scale """
         return self.query_float("LOG?")
 
-    def set_log_scale(self,val):
+    def set_log_scale(self,val): # documented
         """ set the log scale """
         if self.__is_int_or_float(val) and self.__is_between(val, 0.1, 10.0):
             self.send_message("LOG %.1f"%(val))
         else:
             self.__verbose_output("error: set_log_scale() - invalid argument",1)
 
-    def get_log_reference_level(self):
+    def get_log_reference_level(self):  #documented
         """ get the log reference level """
         return self.query_float("RLV?")
     
-    def set_log_reference_level(self,val):
+    def set_log_reference_level(self,val): #documented
         """ set the log reference level """
         if self.__is_int_or_float(val) and self.__is_between(val, -90.0, 30.0):
             self.send_message("RLV %.1f"%(val))
         else:
             self.__verbose_output( "error: set_log_reference_level() - invalid argument",1 )
 
-    def get_measuring_points(self):
+    def get_measuring_points(self): # tested and documented
         """ get the number of measuring points"""
         self.send_message( "MPT?")
         msg = self.flush_buffer()
         return int( msg )
 
-    def set_measuring_points(self,val):
+    def set_measuring_points(self,val): #tested and documented
         """ set the number of measuring points"""
         if self.__is_int_or_float(val) and (val in [51,101,251,501,1001,2001,5001] ):
             self.send_message("MPT %d"%(val))
         else:
             self.__verbose_output( "error: set_measuring_points() - invalid argument",1)
 
-    def set_optical_attenuator(self,val):
+    def set_optical_attenuator(self,val): # tested and documented
         if isinstance(val,bool):
             if val==True:
                 self.send_message("ATT ON")
@@ -285,7 +285,7 @@ class Spectrometer():
         else:
                  self.__verbose_output( "error: set_optical_attenuator() - invalid argument",1)
 
-    def get_optical_attenuator(self):
+    def get_optical_attenuator(self): #tested and documented
         """ check whether the optical attenuator is on """
         self.send_message("ATT?")
         msg = self.flush_buffer()
@@ -294,12 +294,11 @@ class Spectrometer():
         else:
             return False
 
-
-    def get_resolution(self):
+    def get_resolution(self): #documented
         """ get the resolution """
         return self.query_float("RES?")
 
-    def set_resolution(self, val):
+    def set_resolution(self, val): #documented
         """ set the resolution """
         if val == 1:
             val = 1.0
@@ -308,22 +307,22 @@ class Spectrometer():
         else:
             self.__verbose_output( "error: set_resolution() - invalid argument",1)
 
-    def get_span(self):
+    def get_span(self): #documented
         """ get the span """
         return self.query_float("SPN?")
     
-    def set_span(self,val):
-        """ set the span """
+    def set_span(self,val): #documented
+        """ set the span """ 
         if self.__is_int_or_float(val) and self.__is_between(val,0.2,1200.0):
             self.send_message("SPN %.1f"%val)
         else:
             self.__verbose_output( "error: set_span() - invalid argument",1)
 
-    def get_start_wavelength(self):
+    def get_start_wavelength(self):  # documented
         """ get the start wavelength """
         return self.query_float("STA?")
 
-    def set_start_wavelength(self,val):
+    def set_start_wavelength(self,val): #documented
         """ set the start wavelength """
         if self.__is_int_or_float(val) and self.__is_between(val,600,1750):
             if val > self.get_stop_wavelength():
@@ -334,11 +333,11 @@ class Spectrometer():
             self.__verbose_output( "error: set_start_wavelength() - invalid argument",1)
 
 
-    def get_stop_wavelength(self):
+    def get_stop_wavelength(self): #documented
         """ get the stop wavelength """
         return self.query_float("STO?")
 
-    def set_stop_wavelength(self,val):
+    def set_stop_wavelength(self,val): #documented
         """ set the stop wavelength """
         if self.__is_int_or_float(val) and self.__is_between(val,600,1800):
             if val < self.get_start_wavelength():
@@ -348,14 +347,14 @@ class Spectrometer():
         else:
             self.__verbose_output( "error: set_stop_wavelength() - invalid argument",1)
 
-    def get_VBW(self):
+    def get_VBW(self):  # documented
         """ get the video bandwidth (VBW) """
         self.send_message("VBW?")
         msg = self.flush_buffer()
         VBWdict = {"10HZ":10, "100HZ":100, "1KHZ":1000, "10KHZ":10000,"100KHZ":100000,"1MHZ":1000000}
         return VBWdict[msg]
         
-    def set_VBW(self,val):
+    def set_VBW(self,val): #documented
         """ set the video bandwidth (VBW) """
         if self.__is_int_or_float(val) and (val in [10, 1e2, 1e3, 1e4, 1e5, 1e6]):
                  self.send_message("VBW %d"%(val))        
@@ -366,7 +365,7 @@ class Spectrometer():
     #
     # andvanced get functions
     #
-    def get_wavelength_vector(self):
+    def get_wavelength_vector(self): #documented
         """ get the wavelength vector, calculated from the current spectrometer settings"""
         startwl = self.get_start_wavelength()
         stopwl  = self.get_stop_wavelength()
@@ -417,8 +416,6 @@ class Spectrometer():
     #
     # Functions that need to be tested
     #
-
-
 
 
     def get_linear_scale(self):
