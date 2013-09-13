@@ -112,7 +112,7 @@ class Spectrometer():
                 out =self.device.read(3)
         self.__verbose_output( "... sweep complete", 1)
 
-    def query_float(self,query_string): 
+    def __query_float(self,query_string): 
         """ returns the result of a Query (e.g. "STA?") as a float number """
         self.send_message(query_string)
         msg = self.flush_buffer()
@@ -201,7 +201,7 @@ class Spectrometer():
             
     def get_center_wavelength(self):     #tested and documented
         """ get the center wavelength """
-        return self.query_float("CNT?")
+        return self.__query_float("CNT?")
 
     def set_center_wavelength(self,val): #tested and documented
         """ set the center wavelength """
@@ -243,7 +243,7 @@ class Spectrometer():
 
     def get_log_scale(self):  # documented
         """ get the log scale """
-        return self.query_float("LOG?")
+        return self.__query_float("LOG?")
 
     def set_log_scale(self,val): # documented
         """ set the log scale """
@@ -254,7 +254,7 @@ class Spectrometer():
 
     def get_log_reference_level(self):  #documented
         """ get the log reference level """
-        return self.query_float("RLV?")
+        return self.__query_float("RLV?")
     
     def set_log_reference_level(self,val): #documented
         """ set the log reference level """
@@ -296,7 +296,7 @@ class Spectrometer():
 
     def get_resolution(self): #documented
         """ get the resolution """
-        return self.query_float("RES?")
+        return self.__query_float("RES?")
 
     def set_resolution(self, val): #documented
         """ set the resolution """
@@ -309,7 +309,7 @@ class Spectrometer():
 
     def get_span(self): #documented
         """ get the span """
-        return self.query_float("SPN?")
+        return self.__query_float("SPN?")
     
     def set_span(self,val): #documented
         """ set the span """ 
@@ -320,7 +320,7 @@ class Spectrometer():
 
     def get_start_wavelength(self):  # documented
         """ get the start wavelength """
-        return self.query_float("STA?")
+        return self.__query_float("STA?")
 
     def set_start_wavelength(self,val): #documented
         """ set the start wavelength """
@@ -335,7 +335,7 @@ class Spectrometer():
 
     def get_stop_wavelength(self): #documented
         """ get the stop wavelength """
-        return self.query_float("STO?")
+        return self.__query_float("STO?")
 
     def set_stop_wavelength(self,val): #documented
         """ set the stop wavelength """
@@ -430,5 +430,3 @@ class Spectrometer():
             value = float( msg[0:l-2])
             unitdict = {"MW":1e-3, "UW":1e-6, "NW":1e-9,"PW":1e-12}
             return value * unitdict[unit]
-    
-
