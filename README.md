@@ -6,10 +6,12 @@ spectroAPI.py provides the API
 
 programs that make use of the API are planned.
 
+!!! CAUTION: this software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE !!!
+
+
+
 # dependencies 
 you will need the pyserial software package and python>2.7.3
-
-!!! CAUTION: this software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE !!!
 
 
 # api functions 
@@ -57,3 +59,9 @@ you will need the pyserial software package and python>2.7.3
 * **Spectrometer.get\_wavelength\_vector()** returns the wavelenght vector calculated according to the actual settings
 ### control functions 
 * **Spectrometer.make\_sweep()**
+
+<table>
+<tr>
+<td> a </td><td> b </td>
+</tr>
+</table>
