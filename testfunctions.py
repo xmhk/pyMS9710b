@@ -151,16 +151,16 @@ def test_VBW(s):
     return RV
 
 def alltests(s):
-#    print "Memory select test:",test_memory_select(s)
-#    print "Trace select test:",test_memory_select(s)
-#    print "Optical Att. test:",test_optical_attenuator(s)
-#    print "test setting measuring points:",test_measuring_points(s)
-#    print "sweep average: ",test_sweep_average(s)
+    print "Memory select test:",test_memory_select(s)
+    print "Trace select test:",test_memory_select(s)
+    print "Optical Att. test:",test_optical_attenuator(s)
+    print "test setting measuring points:",test_measuring_points(s)
+    print "sweep average: ",test_sweep_average(s)
     print "point average : ",test_sweep_average(s)
-#    print "center wavelength",test_center_wavelength(s)
-#    print "lin. scale settings",test_linear_scale_setting(s)
-#    print "log scale settings",test_log_scale_settings(s)
-#    print "test resolutions settings", test_resolution(s) 
+    print "center wavelength",test_center_wavelength(s)
+    print "lin. scale settings",test_linear_scale_setting(s)
+    print "log scale settings",test_log_scale_settings(s)
+    print "test resolutions settings", test_resolution(s) 
     print "span test", test_span(s)
     print "VBW test ",test_VBW(s)
     pass
