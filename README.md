@@ -1,67 +1,45 @@
-... this aims to be an interface for the anritsu ms9710b spectrometer.
-
-connection is done via serial port (with an USB->RS232 dongle in our case).
-
-spectroAPI.py provides the API
-
-programs that make use of the API are planned.
-
-!!! CAUTION: this software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE !!!
-
-
-
-# dependencies 
-you will need the pyserial software package and python>2.7.3
-
-
-# api functions 
-
-
 ### low level communication 
-
-* **Spectrometer.send_message(MSG)**          send a message to the spectrometer
-* **Spectrometer.flush_buffer()**		get the content of the buffer
-* **Spectrometer.set\_verbose\_level(self,val)** control the verbosity of the API (0,1,2,...)
-
-### get functions
-
-* **Spectrometer.get\_current\_memory()**       STRING     "A","B"
-* **Spectrometer.get\_current\_trace()**        STRING     "A","B"
-* **Spectrometer.is_log()**			BOOL
-* **Spectrometer.get\_optical\_attenuator()**   BOOL
-* **Spectrometer.get_sweep_average()**	INT   0=off, 2..1000
-* **Spectrometer.get\_point\_average()**	INT   0=off, 2..1000
-* **Spectrometer.get\_center\_wavelength()**    FLOAT 600 ..1750
-* **Spectrometer.get\_log\_scale()** FLOAT 0.1..10.0
-* **Spectrometer.get\_log\_reference\_level()** FLOAT -90.0..30.0
-* **Spectrometer.get\_resolution()** FLOAT [0.07,0.1,0.2,0.5,1.0]
-* **Spectrometer.get\_measuring\_points()** INT [51,101,251,501,1001,2001,5001]
-* **Spectrometer.get\_span()** FLOAT 0.2..1200.0
-* **Spectrometer.get\_start\_wavelength()** FLOAT 600.0..1750.0
-* **Spectrometer.get\_stop\_wavelength()** FLOAT 600.0..1800.0
-* **Spectrometer.get\_VBW()** FLOAT [1e1,1e2,1e3,1e4,1e5,1e6]
-
-### set functions  
-* **Spectrometer.set\_optical\_attenuator(val)**   BOOL
-* **Spectrometer.set\_sweep\_average(val)**     INT val=0 (off), 2..1000
-* **Spectrometer.set\_point\_average(val)**	INT   0=off, 2..1000
-* **Spectrometer.set\_center\_wavelength(val)** FLOAT 600.1750
-* **Spectrometer.set\_linear\_scale(val)** FLOAT 1.0e-12..1.0 
-* **Spectrometer.set\_log\_scale(val)** FLOAT 0.1..10.0
-* **Spectrometer.set\_log\_reference\_level(val)** FLOAT -90.0..30.0
-* **Spectrometer.set\_measuring\_points(val)** INT [51,101,251,501,1001,2001,5001]
-* **Spectrometer.set\_resolution(val)** FLOAT [0.07,0.1,0.2,0.5,1.0]
-* **Spectrometer.set\_span(val)** FLOAT 0.2..1200.0
-* **Spectrometer.set\_start\_wavelength(val)** FLOAT 600.0..1750.0
-* **Spectrometer.set\_stop\_wavelength(val)** FLOAT 600.0..1800.0
-* **Spectrometer.set\_VBW(val)** FLOAT [1e1,1e2,1e3,1e4,1e5,1e6]
-
-* **Spectrometer.get\_wavelength\_vector()** returns the wavelenght vector calculated according to the actual settings
-### control functions 
-* **Spectrometer.make\_sweep()**
-
 <table>
-<tr>
-<td> a </td><td> b </td>
-</tr>
+<tr> <td><b>method</b></td> <td><b>description</b></td> <td><b>input type</b></td> <td><b>input range</b></td> <td><b>output type</b></td> <td><b>output range</b></td> </tr>
+<tr> <td><b>Spectrometer.send_message(MSG)</b></td> <td>send a message to the spectrometer</td> <td></td> <td></td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.flush_buffer()</b></td> <td>get the content of the buffer</td> <td></td> <td></td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_verbose_level(self,val)</b></td> <td>control the verbosity of the API </td> <td>INT</td> <td>0,1,2,..</td> <td></td> <td></td> </tr>
+</table>
+### get functions 
+<table>
+<tr> <td><b>method</b></td> <td><b>description</b></td> <td><b>input type</b></td> <td><b>input range</b></td> <td><b>output type</b></td> <td><b>output range</b></td> </tr>
+<tr> <td><b>Spectrometer.get_current_memory()</b></td> <td>returns current memory bank</td> <td>-</td> <td>-</td> <td>STRING</td> <td>A, B</td> </tr>
+<tr> <td><b>Spectrometer.get_current_trace()</b></td> <td>returns current trace</td> <td>-</td> <td>-</td> <td>STRING</td> <td>A or B</td> </tr>
+<tr> <td><b>Spectrometer.is_log()</b></td> <td>check whether spectrometer is in log mode</td> <td>-</td> <td>-</td> <td>BOOL</td> <td>True, False</td> </tr>
+<tr> <td><b>Spectrometer.get_optical_attenuator()</b></td> <td>check wheter optical attenuator is on</td> <td>-</td> <td>-</td> <td>BOOL</td> <td>True, False</td> </tr>
+<tr> <td><b>Spectrometer.get_sweep_average()</b></td> <td>returns sweep average</td> <td>-</td> <td>-</td> <td>INT</td> <td>0=off, 2 .. 1000</td> </tr>
+<tr> <td><b>Spectrometer.get_point_average()</b></td> <td>returns point average</td> <td>-</td> <td>-</td> <td>INT</td> <td>0=off, 2 .. 1000</td> </tr>
+<tr> <td><b>Spectrometer.get_center_wavelength()</b></td> <td>returns center wavelength</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>600.0  .. 1750.0 (in nm)</td> </tr>
+<tr> <td><b>Spectrometer.get_log_scale()</b></td> <td>returns log scaling</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>0.1 .. 10.0 (in UNIT?)</td> </tr>
+<tr> <td><b>Spectrometer.get_linear_scale()</b></td> <td>returns linear scaling</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>1e-12 .. 1.0 (in W/div ??? check unit)</td> </tr>
+<tr> <td><b>Spectrometer.get_log_reference_level()</b></td> <td>returns log reference level</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>-90.0 .. 30.0 (in UNIT?)</td> </tr>
+<tr> <td><b>Spectrometer.get_resolution()</b></td> <td>returns display resolution</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>[0.07,0.1,0.2,0.5,1.0] (in nm)</td> </tr>
+<tr> <td><b>Spectrometer.get_measuring_points()</b></td> <td>returns the number ofe measuring points</td> <td>-</td> <td>-</td> <td>INT</td> <td>[51,101,251,501,1001,2001,5001]</td> </tr>
+<tr> <td><b>Spectrometer.get_span()</b></td> <td>returns span</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>0.2 .. 1200.0 (in nm)</td> </tr>
+<tr> <td><b>Spectrometer.get_start_wavelength()</b></td> <td>returns start wavelength</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>600.0 .. 1750.0 (in nm)</td> </tr>
+<tr> <td><b>Spectrometer.get_stop_wavelength()</b></td> <td>returns stop wavelength</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>600.0 .. 1800.0 (in nm)</td> </tr>
+<tr> <td><b>Spectrometer.get_VBW()</b></td> <td>returns video bandwidth</td> <td>-</td> <td>-</td> <td>FLOAT</td> <td>[1e1,1e2,1e3,1e4,1e5,1e6] (in Hz)</td> </tr>
+<tr> <td><b>Spectrometer.get_wavelength_vector()</b></td> <td>returns the wavelenght vector calculated according to the actual settings</td> <td>-</td> <td>-</td> <td>List of FLOAT</td> <td>600.0 .. 800.0  (in nm)</td> </tr>
+</table>
+### set functions 
+<table>
+<tr> <td><b>method</b></td> <td><b>description</b></td> <td><b>input type</b></td> <td><b>input range</b></td> <td><b>output type</b></td> <td><b>output range</b></td> </tr>
+<tr> <td><b>Spectrometer.set_optical_attenuator(val)</b></td> <td>set the optical attenuator</td> <td>BOOL</td> <td>True, False</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_sweep_average(val)</b></td> <td>set the sweep average</td> <td>INT</td> <td>0 (off), 2..1000</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_point_average(val)</b></td> <td>set the point average</td> <td>INT</td> <td>0 (off), 2..1000</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_center_wavelength(val)</b></td> <td>set the center wavelength</td> <td>FLOAT</td> <td>600.0 .. 1750.0  (in nm)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_linear_scale(val)</b></td> <td>set the linear display scale</td> <td>FLOAT</td> <td>1.0e-12 .. 1.0 (in UNIT?)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_log_scale(val)</b></td> <td>set the log display scale</td> <td>FLOAT</td> <td>0.1 .. 10.0 (in UNIT?)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_log_reference_level(val)</b></td> <td>set the log reference level</td> <td>FLOAT</td> <td>-90.0..30.0 (in UNIT?)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_measuring_points(val)</b></td> <td>set the number of measuring points</td> <td>INT</td> <td>[51,101,251,501,1001,2001,5001]</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_resolution(val)</b></td> <td>set the resolution</td> <td>FLOAT</td> <td>[0.07,0.1,0.2,0.5,1.0] (in nm)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_span(val)</b></td> <td>set the sweep span</td> <td>FLOAT</td> <td>0.2 .. 1200.0  (in nm)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_start_wavelength(val)</b></td> <td>set the start wavelength</td> <td>FLOAT</td> <td>600.0 .. 1750.0 (in nm)</td> <td></td> <td></td> </tr>
+<tr> <td><b>Spectrometer.set_stop_wavelength(val)</b></td> <td>set the stop wavelength</td> <td>FLOAT</td> <td>600.0 .. 1800.0 (in nm)</td> <td></td> <td></td> </tr>
+<tr> <td><b> Spectrometer.set_VBW(val)</b></td> <td>set the video bandwidth</td> <td>FLOAT</td> <td>[1e1,1e2,1e3,1e4,1e5,1e6] (in Hz)</td> <td></td> <td></td> </tr>
 </table>
