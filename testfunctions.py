@@ -10,8 +10,14 @@ def test_vals( getfunction, setfunction, validvals, invalidvals):
     oldval = function_wrapper(getfunction, None)
     passed = True
     for v in validvals:
+        #print "v = ",v
         function_wrapper( setfunction, v)
-        passed = passed and v == function_wrapper( getfunction, None)
+        result = function_wrapper( getfunction, None)
+        if isinstance(result,float): #prevent failure due to rounding errors
+            if abs(result-v)/v < 1e-6:
+                result = v
+        passed = passed and v == result
+        #print passed
     print "\n--- below : intentional errors ... ---"
     for iv in invalidvals:
         function_wrapper( setfunction, iv)
@@ -73,11 +79,33 @@ def test_center_wavelength(s):
                       [600,900,1750],
                       [500,-10,2000])
 
+
+def test_linear_scale_setting(s):
+    #test whether log
+    waslog = False
+    if s.is_log:
+        oldlogscale = s.get_log_scale()
+        oldlogref = s.get_log_reference_level()
+        waslog = True
+#        print "\n __ was log __ "
+    RV = test_vals(  s.get_linear_scale,
+                      s.set_linear_scale,
+                      [1e-12,2e-11,3e-10,4e-9,5e-8,6e-7,7e-6,8e-5,9e-4,8e-3,7e-2,6e-1,1],
+                      [10,1e-13])
+    if waslog:
+        s.set_log_scale( oldlogscale)
+        s.set_log_reference_level( oldlogref)
+    return RV
+
+
 def alltests(s):
-#    print "Memory select test:",test_memory_select(s)
-#    print "Trace select test:",test_memory_select(s)
-#    print "Optical Att. test:",test_optical_attenuator(s)
-#    print "test setting measuring points:",test_measuring_points(s)
+    print "Memory select test:",test_memory_select(s)
+    print "Trace select test:",test_memory_select(s)
+    print "Optical Att. test:",test_optical_attenuator(s)
+    print "test setting measuring points:",test_measuring_points(s)
     print "sweep average: ",test_sweep_average(s)
-#    print "point average : ",test_sweep_average(s)
-#    print "center wavelength",test_center_wavelength(s)
+    print "point average : ",test_sweep_average(s)
+    print "center wavelength",test_center_wavelength(s)
+ #   pass
+
+

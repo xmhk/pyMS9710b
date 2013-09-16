@@ -35,6 +35,7 @@ list_get_functions = [['method', 'description','input type', 'input range','outp
                        ['Spectrometer.get_point_average()','returns point average','-','-','INT','0=off, 2 .. 1000'],
                        ['Spectrometer.get_center_wavelength()','returns center wavelength','-','-','FLOAT', '600.0  .. 1750.0 (in nm)'],
                        ['Spectrometer.get_log_scale()','returns log scaling','-','-','FLOAT','0.1 .. 10.0 (in UNIT?)'],
+                       ['Spectrometer.get_linear_scale()','returns linear scaling','-','-','FLOAT','1e-12 .. 1.0 (in W/div ??? check unit)'],
                        ['Spectrometer.get_log_reference_level()','returns log reference level','-','-','FLOAT','-90.0 .. 30.0 (in UNIT?)'],
                       ['Spectrometer.get_resolution()','returns display resolution','-','-','FLOAT','[0.07,0.1,0.2,0.5,1.0] (in nm)'],
                       ['Spectrometer.get_measuring_points()','returns the number ofe measuring points','-','-','INT','[51,101,251,501,1001,2001,5001]'],

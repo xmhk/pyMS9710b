@@ -9,7 +9,7 @@ import time
     some signal to the spectrometer and polling the answer (buffer fill time).
     They may have to be adjusted according to your RS232 connection speed """
 CONST_TIME_SHORT  = 0.05 #seconds
-CONST_TIME_MEDIUM = 0.1
+CONST_TIME_MEDIUM = 0.15
 CONST_TIME_LONG   = 1.0
 
 
@@ -234,10 +234,23 @@ class Spectrometer():
         else: 
             self.__verbose_output("error: set_current_trace - invalid argument",1)
     
+    def get_linear_scale(self): # tested and documented
+        """ get the linear scale """
+        self.send_message("LLV?")
+        msg = self.flush_buffer()
+        if msg == "1.0W":
+            return 1.0 #1.0W is the only (and highest) value with unit 'W'
+        else:
+            l = len(msg)
+            unit = msg[l-2:l]
+            value = float( msg[0:l-2])
+            unitdict = {"MW":1e-3, "UW":1e-6, "NW":1e-9,"PW":1e-12}
+            return value * unitdict[unit]
+
     def set_linear_scale(self,val): #documented
         """ set the linear scale """
         if self.__is_int_or_float(val) and self.__is_between(val, 1e-12, 1.0):
-            self.send_message( "LLV %f"%(val*1000))   #spectrometer expects values in mW!
+            self.send_message( "LLV %.9f"%(val*1000))   #spectrometer expects values in mW!
         else:
             self.__verbose_output("error: set_linear_scale() - invalid argument",1)
 
@@ -418,15 +431,3 @@ class Spectrometer():
     #
 
 
-    def get_linear_scale(self):
-        """ get the linear scale """
-        self.send_message("LLV?")
-        msg = self.flush_buffer()
-        if msg == "1.0W":
-            return 1.0 #1.0W is the only (and highest) value with unit 'W'
-        else:
-            l = len(msg)
-            unit = msg[l-2:l]
-            value = float( msg[0:l-2])
-            unitdict = {"MW":1e-3, "UW":1e-6, "NW":1e-9,"PW":1e-12}
-            return value * unitdict[unit]
