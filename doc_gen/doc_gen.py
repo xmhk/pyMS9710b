@@ -63,6 +63,8 @@ list_set_functions = [['method', 'description','input type', 'input range','outp
                       ]
 
 
+print "NO WARRANTY for NOTHING! still work in progress ... "
+
 maketable('### low level communication ', list_lowlevel)
 maketable('### get functions ', list_get_functions)
 maketable('### set functions ', list_set_functions)

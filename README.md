@@ -1,3 +1,4 @@
+NO WARRANTY for NOTHING! still work in progress ... 
 ### low level communication 
 <table>
 <tr> <td><b>method</b></td> <td><b>description</b></td> <td><b>input type</b></td> <td><b>input range</b></td> <td><b>output type</b></td> <td><b>output range</b></td> </tr>

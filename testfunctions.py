@@ -98,14 +98,71 @@ def test_linear_scale_setting(s):
     return RV
 
 
+def test_log_scale_settings(s):
+    #test whether is lin
+    waslin = False
+    if s.is_log() == False:
+        oldlinscale = s.get_linear_scale()
+    else:
+        oldlogref = s.get_log_reference_level()
+        oldlogscale = s.get_log_scale()
+    RV = test_vals( s.get_log_scale,
+                    s.set_log_scale,
+                    [0.1,2,7.0,10.0],
+                    [-0.2,11])
+    RV2 = test_vals( s.get_log_reference_level,
+                     s.set_log_reference_level,
+                     [-90.0,-45.0,10,30],
+                     [-91.0, 31.0])
+    if waslin:
+        s.set_linear_scale(oldlinscale)
+    else:
+        s.set_log_reference_level(oldlogref)
+        s.set_log_scale(oldlogscale)    
+    return RV and RV2
+
+def test_resolution(s):
+    oldres = s.get_resolution()
+    RV = test_vals( s.get_resolution,
+                    s.set_resolution,
+                    [0.07,0.1,0.2,0.5,1.0],
+                    [3,7])
+    return RV
+
+
+def test_span(s):
+    oldspan = s.get_span()
+    oldctr = s.get_center_wavelength()
+    RV = test_vals( s.get_span,
+                    s.set_span,
+                    [0.20,1000.0,1200.0],
+                    [0.1,1201.0])
+    s.set_span(oldspan)
+    s.set_center_wavelength(oldctr)
+    return RV
+
+def test_VBW(s):
+    oldvbw = s.get_VBW()
+    RV = test_vals( s.get_VBW,
+                    s.set_VBW,
+                    [10,1e2,1e3, 1e4, 1e5, 1e6],
+                    [1,1e7])
+    s.set_VBW(oldvbw)
+    return RV
+
 def alltests(s):
-    print "Memory select test:",test_memory_select(s)
-    print "Trace select test:",test_memory_select(s)
-    print "Optical Att. test:",test_optical_attenuator(s)
-    print "test setting measuring points:",test_measuring_points(s)
-    print "sweep average: ",test_sweep_average(s)
+#    print "Memory select test:",test_memory_select(s)
+#    print "Trace select test:",test_memory_select(s)
+#    print "Optical Att. test:",test_optical_attenuator(s)
+#    print "test setting measuring points:",test_measuring_points(s)
+#    print "sweep average: ",test_sweep_average(s)
     print "point average : ",test_sweep_average(s)
-    print "center wavelength",test_center_wavelength(s)
- #   pass
+#    print "center wavelength",test_center_wavelength(s)
+#    print "lin. scale settings",test_linear_scale_setting(s)
+#    print "log scale settings",test_log_scale_settings(s)
+#    print "test resolutions settings", test_resolution(s) 
+    print "span test", test_span(s)
+    print "VBW test ",test_VBW(s)
+    pass
 
 
