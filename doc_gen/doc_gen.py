@@ -29,7 +29,7 @@ list_lowlevel = [['method', 'description','input type', 'input range','output ty
 list_get_functions = [['method', 'description','input type', 'input range','output type','output range'],
                        ['Spectrometer.get_current_memory()','returns current memory bank','-','-','STRING','A, B'],
                        ['Spectrometer.get_current_trace()','returns current trace','-','-','STRING','A or B'],
-                       ['Spectrometer.is_log()','check whether spectrometer is in log mode','-','-','BOOL','True, False'],
+                       ['Spectrometer.get_is_log()','check whether spectrometer is in log mode','-','-','BOOL','True, False'],
                        ['Spectrometer.get_optical_attenuator()','check wheter optical attenuator is on','-','-','BOOL','True, False'],
                        ['Spectrometer.get_sweep_average()','returns sweep average','-','-','INT','0=off, 2 .. 1000'],
                        ['Spectrometer.get_point_average()','returns point average','-','-','INT','0=off, 2 .. 1000'],

@@ -83,7 +83,7 @@ def test_center_wavelength(s):
 def test_linear_scale_setting(s):
     #test whether log
     waslog = False
-    if s.is_log:
+    if s.get_is_log:
         oldlogscale = s.get_log_scale()
         oldlogref = s.get_log_reference_level()
         waslog = True
@@ -101,7 +101,7 @@ def test_linear_scale_setting(s):
 def test_log_scale_settings(s):
     #test whether is lin
     waslin = False
-    if s.is_log() == False:
+    if s.get_is_log() == False:
         oldlinscale = s.get_linear_scale()
     else:
         oldlogref = s.get_log_reference_level()
