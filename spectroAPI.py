@@ -19,7 +19,7 @@ class Spectrometer_state():
         self.state = self.update(s)
         
     def update(self,s):
-        state={'is_log':s.is_log()}
+        state={'is_log':s.get_is_log()}
         state.update({'optical_attenuator':s.get_optical_attenuator()})
         state.update({'sweep_average':s.get_sweep_average()})
         state.update({'point_average':s.get_point_average()})
@@ -409,7 +409,7 @@ class Spectrometer():
         else: membank = membank.upper()
         #check whether the spectrometer is in LOG display mode
         #if yes, store log variables and change to lin mode
-        if self.is_log():
+        if self.get_is_log():
             waslog = True
             oldlogdiv = self.get_log_scale()
             oldlogref = self.get_log_reference_level()
